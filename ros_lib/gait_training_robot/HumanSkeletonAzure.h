@@ -17,6 +17,8 @@ namespace gait_training_robot
       typedef std_msgs::Header _header_type;
       _header_type header;
       geometry_msgs::Pose poses[26];
+      typedef uint32_t _id_type;
+      _id_type id;
       enum { K4ABT_JOINT_PELVIS = 0 };
       enum { K4ABT_JOINT_SPINE_NAVAL = 1 };
       enum { K4ABT_JOINT_SPINE_CHEST = 2 };
@@ -47,7 +49,8 @@ namespace gait_training_robot
 
     HumanSkeletonAzure():
       header(),
-      poses()
+      poses(),
+      id(0)
     {
     }
 
@@ -58,6 +61,11 @@ namespace gait_training_robot
       for( uint32_t i = 0; i < 26; i++){
       offset += this->poses[i].serialize(outbuffer + offset);
       }
+      *(outbuffer + offset + 0) = (this->id >> (8 * 0)) & 0xFF;
+      *(outbuffer + offset + 1) = (this->id >> (8 * 1)) & 0xFF;
+      *(outbuffer + offset + 2) = (this->id >> (8 * 2)) & 0xFF;
+      *(outbuffer + offset + 3) = (this->id >> (8 * 3)) & 0xFF;
+      offset += sizeof(this->id);
       return offset;
     }
 
@@ -68,11 +76,16 @@ namespace gait_training_robot
       for( uint32_t i = 0; i < 26; i++){
       offset += this->poses[i].deserialize(inbuffer + offset);
       }
+      this->id =  ((uint32_t) (*(inbuffer + offset)));
+      this->id |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
+      this->id |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
+      this->id |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
+      offset += sizeof(this->id);
      return offset;
     }
 
     const char * getType(){ return "gait_training_robot/HumanSkeletonAzure"; };
-    const char * getMD5(){ return "afd685bb64724ffaf11217cf63254396"; };
+    const char * getMD5(){ return "968f9d51d0ce0347ab8287bd9a86b42d"; };
 
   };
 
