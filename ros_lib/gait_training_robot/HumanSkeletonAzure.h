@@ -16,8 +16,7 @@ namespace gait_training_robot
     public:
       typedef std_msgs::Header _header_type;
       _header_type header;
-      typedef geometry_msgs::Pose _pose_type;
-      _pose_type pose;
+      geometry_msgs::Pose pose[26];
       enum { K4ABT_JOINT_PELVIS = 0 };
       enum { K4ABT_JOINT_SPINE_NAVAL = 1 };
       enum { K4ABT_JOINT_SPINE_CHEST = 2 };
@@ -56,7 +55,9 @@ namespace gait_training_robot
     {
       int offset = 0;
       offset += this->header.serialize(outbuffer + offset);
-      offset += this->pose.serialize(outbuffer + offset);
+      for( uint32_t i = 0; i < 26; i++){
+      offset += this->pose[i].serialize(outbuffer + offset);
+      }
       return offset;
     }
 
@@ -64,7 +65,9 @@ namespace gait_training_robot
     {
       int offset = 0;
       offset += this->header.deserialize(inbuffer + offset);
-      offset += this->pose.deserialize(inbuffer + offset);
+      for( uint32_t i = 0; i < 26; i++){
+      offset += this->pose[i].deserialize(inbuffer + offset);
+      }
      return offset;
     }
 
