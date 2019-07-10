@@ -1,5 +1,5 @@
-#ifndef _ROS_gait_training_robot_human_skeleton_h
-#define _ROS_gait_training_robot_human_skeleton_h
+#ifndef _ROS_gait_training_robot_HumanSkeletonV2_h
+#define _ROS_gait_training_robot_HumanSkeletonV2_h
 
 #include <stdint.h>
 #include <string.h>
@@ -11,7 +11,7 @@
 namespace gait_training_robot
 {
 
-  class human_skeleton : public ros::Msg
+  class HumanSkeletonV2 : public ros::Msg
   {
     public:
       typedef std_msgs::Header _header_type;
@@ -50,7 +50,7 @@ namespace gait_training_robot
       enum { TrackingState_Inferred = 1 };
       enum { TrackingState_Tracked = 2 };
 
-    human_skeleton():
+    HumanSkeletonV2():
       header(),
       point_length(0), point(NULL)
     {
@@ -90,7 +90,7 @@ namespace gait_training_robot
      return offset;
     }
 
-    const char * getType(){ return "gait_training_robot/human_skeleton"; };
+    const char * getType(){ return "gait_training_robot/HumanSkeletonV2"; };
     const char * getMD5(){ return "d613d21ba87e255b15ca65a616b93a8c"; };
 
   };

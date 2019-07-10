@@ -1,5 +1,5 @@
-#ifndef _ROS_gait_training_robot_human_skeleton_azure_h
-#define _ROS_gait_training_robot_human_skeleton_azure_h
+#ifndef _ROS_gait_training_robot_HumanSkeletonAzure_h
+#define _ROS_gait_training_robot_HumanSkeletonAzure_h
 
 #include <stdint.h>
 #include <string.h>
@@ -11,7 +11,7 @@
 namespace gait_training_robot
 {
 
-  class human_skeleton_azure : public ros::Msg
+  class HumanSkeletonAzure : public ros::Msg
   {
     public:
       typedef std_msgs::Header _header_type;
@@ -46,7 +46,7 @@ namespace gait_training_robot
       enum { K4ABT_JOINT_EAR_RIGHT = 25 };
       enum { K4ABT_JOINT_COUNT = 26 };
 
-    human_skeleton_azure():
+    HumanSkeletonAzure():
       header(),
       pose()
     {
@@ -68,7 +68,7 @@ namespace gait_training_robot
      return offset;
     }
 
-    const char * getType(){ return "gait_training_robot/human_skeleton_azure"; };
+    const char * getType(){ return "gait_training_robot/HumanSkeletonAzure"; };
     const char * getMD5(){ return "afd685bb64724ffaf11217cf63254396"; };
 
   };
