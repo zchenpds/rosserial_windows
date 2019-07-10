@@ -16,9 +16,11 @@ namespace gait_training_robot
     public:
       typedef std_msgs::Header _header_type;
       _header_type header;
-      geometry_msgs::Pose poses[26];
+      typedef uint64_t _k4a_timestamp_usec_type;
+      _k4a_timestamp_usec_type k4a_timestamp_usec;
       typedef uint32_t _id_type;
       _id_type id;
+      geometry_msgs::Pose poses[26];
       enum { K4ABT_JOINT_PELVIS = 0 };
       enum { K4ABT_JOINT_SPINE_NAVAL = 1 };
       enum { K4ABT_JOINT_SPINE_CHEST = 2 };
@@ -49,8 +51,9 @@ namespace gait_training_robot
 
     HumanSkeletonAzure():
       header(),
-      poses(),
-      id(0)
+      k4a_timestamp_usec(0),
+      id(0),
+      poses()
     {
     }
 
@@ -58,14 +61,24 @@ namespace gait_training_robot
     {
       int offset = 0;
       offset += this->header.serialize(outbuffer + offset);
-      for( uint32_t i = 0; i < 26; i++){
-      offset += this->poses[i].serialize(outbuffer + offset);
-      }
+      union {
+        uint64_t real;
+        uint32_t base;
+      } u_k4a_timestamp_usec;
+      u_k4a_timestamp_usec.real = this->k4a_timestamp_usec;
+      *(outbuffer + offset + 0) = (u_k4a_timestamp_usec.base >> (8 * 0)) & 0xFF;
+      *(outbuffer + offset + 1) = (u_k4a_timestamp_usec.base >> (8 * 1)) & 0xFF;
+      *(outbuffer + offset + 2) = (u_k4a_timestamp_usec.base >> (8 * 2)) & 0xFF;
+      *(outbuffer + offset + 3) = (u_k4a_timestamp_usec.base >> (8 * 3)) & 0xFF;
+      offset += sizeof(this->k4a_timestamp_usec);
       *(outbuffer + offset + 0) = (this->id >> (8 * 0)) & 0xFF;
       *(outbuffer + offset + 1) = (this->id >> (8 * 1)) & 0xFF;
       *(outbuffer + offset + 2) = (this->id >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->id >> (8 * 3)) & 0xFF;
       offset += sizeof(this->id);
+      for( uint32_t i = 0; i < 26; i++){
+      offset += this->poses[i].serialize(outbuffer + offset);
+      }
       return offset;
     }
 
@@ -73,19 +86,30 @@ namespace gait_training_robot
     {
       int offset = 0;
       offset += this->header.deserialize(inbuffer + offset);
-      for( uint32_t i = 0; i < 26; i++){
-      offset += this->poses[i].deserialize(inbuffer + offset);
-      }
+      union {
+        uint64_t real;
+        uint32_t base;
+      } u_k4a_timestamp_usec;
+      u_k4a_timestamp_usec.base = 0;
+      u_k4a_timestamp_usec.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
+      u_k4a_timestamp_usec.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
+      u_k4a_timestamp_usec.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
+      u_k4a_timestamp_usec.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
+      this->k4a_timestamp_usec = u_k4a_timestamp_usec.real;
+      offset += sizeof(this->k4a_timestamp_usec);
       this->id =  ((uint32_t) (*(inbuffer + offset)));
       this->id |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
       this->id |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
       this->id |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
       offset += sizeof(this->id);
+      for( uint32_t i = 0; i < 26; i++){
+      offset += this->poses[i].deserialize(inbuffer + offset);
+      }
      return offset;
     }
 
     const char * getType(){ return "gait_training_robot/HumanSkeletonAzure"; };
-    const char * getMD5(){ return "968f9d51d0ce0347ab8287bd9a86b42d"; };
+    const char * getMD5(){ return "00dd94bfdae56c9aae4ff6742aeeacd3"; };
 
   };
 
