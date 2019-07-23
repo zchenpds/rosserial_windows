@@ -44,7 +44,7 @@ void normalizeSecNSec(uint32_t& sec, uint32_t& nsec)
   nsec = nsec_part;
 }
 
-Time& Time::fromNSec(int32_t t)
+Time& Time::fromNSec(int64_t t)
 {
   sec = t / 1000000000;
   nsec = t % 1000000000;

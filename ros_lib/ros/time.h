@@ -64,11 +64,11 @@ public:
     nsec = (uint32_t) round((t - sec) * 1e9);
   };
 
-  uint32_t toNsec()
+  uint64_t toNsec()
   {
-    return (uint32_t)sec * 1000000000ull + (uint32_t)nsec;
+    return (uint64_t)sec * 1000000000ull + (uint64_t)nsec;
   };
-  Time& fromNSec(int32_t t);
+  Time& fromNSec(int64_t t);
 
   Time& operator +=(const Duration &rhs);
   Time& operator -=(const Duration &rhs);
